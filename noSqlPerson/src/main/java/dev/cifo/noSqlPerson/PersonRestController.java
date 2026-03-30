@@ -48,6 +48,12 @@ public class PersonRestController {
         return personService.save(person);
     }
 
+    @PostMapping("/update")
+    public Person savePersonByKey(@RequestBody Person person) {
+        System.out.println("Updating person: " + person.toString());
+        return personService.save(person);
+    }
+
     @GetMapping("/getByKey")
     public Person getPersonByKey(@RequestParam String id, @RequestParam String operation) {
         return personService.getPersonByKey(id, operation);

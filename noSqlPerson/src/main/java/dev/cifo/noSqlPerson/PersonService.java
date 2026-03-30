@@ -49,25 +49,22 @@ public class PersonService {
      * If a person with the same id + operation already exists, it will be replaced.
      */
     public Person save(Person person) {
-        String id = UUID.randomUUID().toString();
+        // If the id is null or blank, create a new person
         if (person.getId() == null || person.getId().isBlank()) {
+            String id = UUID.randomUUID().toString();
             person.setId(id);
+            person.setOperation("CREATE");
+            person.setCreatedAt(Instant.now());
+            // putItem will create a new item if it doesn't exist
+            personTable.putItem(person); // Save to DynamoDB
+            System.out.println("Person saved: " + getPersonByKey(id, "CREATE"));
+        } else {
+            person.setOperation("UPDATE");
+            person.setUpdatedAt(Instant.now());
+            // putItem will update the item if it exists IF NOT IT WILL CREATE IT
+            personTable.putItem(person); // Save to DynamoDB
+            System.out.println("Person updated: " + getPersonByKey(person.getId(), "UPDATE"));
         }
-
-        if (person.getOperation() == null || person.getOperation().isBlank()) {
-            person.setOperation("CREATE");   // Default operation if none provided
-        }
-
-        person.setCreatedAt(Instant.now());
-
-        personTable.putItem(person); // Save to DynamoDB
-
-        Key key = Key.builder()
-                .partitionValue(person.getId())
-                .sortValue(person.getOperation())
-                .build();
-
-        System.out.println("Person saved: " + getPersonByKey(id, "CREATE"));
 
         return person;
     }
