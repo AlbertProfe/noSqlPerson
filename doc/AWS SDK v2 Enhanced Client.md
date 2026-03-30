@@ -13,18 +13,88 @@ The **AWS SDK for Java 2.x Enhanced Client** is the modern, official way to work
 
 ### Local AWS Credentials Setup (Using AWS CLI)
 
-To let your `Spring Boot` app connect to AWS when running locally, use the <mark>AWS CLI</mark> to save your credentials.
+Install LInux AWS  CLI  (Command Line Interface) on Ubuntu, follow these steps:
 
-Open your terminal and run this command:
+**1. Update the Package Index**
 
-```js
+Run the following command to ensure your package list is up-to-date:  
+
+```
+sudo apt update
+```
+
+**2. Install Dependencies**
+
+Ensure you have the necessary dependencies installed:  
+
+```
+sudo apt install -y unzip curl
+```
+
+**Download the AWS CLI Installer**
+
+Use `curl` to download the AWS CLI v2 installer:  
+
+```
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+```
+
+**Extract the Installer**
+
+Unzip the downloaded file:  
+
+```
+unzip awscliv2.zip
+```
+
+**Run the Installer**
+
+Run the installation script:  
+
+```
+sudo ./aws/install
+```
+
+**Verify the Installation**
+
+Confirm that the AWS CLI is installed and check its version:  
+
+```
+aws --version
+```
+
+You should see output similar to:  
+
+```
+aws-cli/2.x.x Python/x.x.x Linux/x.x.x
+```
+
+**Clean Up**
+
+(Optional) Remove the downloaded files to free up space:  
+
+```
+rm -rf awscliv2.zip aws
+```
+
+**Configure the AWS CLI**
+
+Set up your AWS credentials:  
+
+```
 aws configure
 ```
 
-It will ask for your AWS Access Key ID, Secret Access Key, default region (e.g. us-east-1), and output format (json).
+You’ll need to provide:
+
+- **Access Key ID** / **Secret Access Key**
+- **Default region** (e.g., `eu-central-1`)
+- **Output format** (e.g., `json`, `text`, or `table`)
+
+It will ask for your AWS Access Key ID, Secret Access Key, default region (e.g. e<mark>u-central-1</mark>), and output format (<mark>json</mark>).
 These keys are saved safely in a hidden folder on your computer (`~/.aws/credentials`). <mark>Spring Cloud AWS</mark> will automatically read them. 
 
-> **Warning**: For better security, avoid using your root account keys in daily development — prefer IAM user keys instead. (48 words)
+> **Warning**: For better security, avoid using your root account keys in daily development — prefer IAM user keys instead. 
 
 ### Step 1: Add the Required Dependencies
 
