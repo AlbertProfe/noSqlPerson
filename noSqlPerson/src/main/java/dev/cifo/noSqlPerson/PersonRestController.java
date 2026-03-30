@@ -19,6 +19,11 @@ public class PersonRestController {
     @GetMapping("/getAll")
     public List<Person> getAll() {
         PageIterable<Person> people = personService.getAllPersons();
+        // Convert PageIterable to List using Java Streams
+        // stream() returns a Stream of Page objects
+        // flatMap() returns a Stream of Person
+        // page -> page.items().stream() : maps each Page to a Stream of Person
+        // collect() returns a List of Person objects
         List<Person> personList = people.stream()
                 .flatMap(page -> page.items().stream())
                 .collect(Collectors.toList());
@@ -41,5 +46,10 @@ public class PersonRestController {
     public Person savePerson(@RequestBody Person person) {
         System.out.println("Saving person: " + person.toString());
         return personService.save(person);
+    }
+
+    @GetMapping("/getByKey")
+    public Person getPersonByKey(@RequestParam String id, @RequestParam String operation) {
+        return personService.getPersonByKey(id, operation);
     }
 }
