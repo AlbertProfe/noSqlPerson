@@ -3,7 +3,9 @@ package dev.cifo.noSqlPerson;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
+import software.amazon.awssdk.enhanced.dynamodb.Key;
 import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
+import software.amazon.awssdk.enhanced.dynamodb.model.Page;
 import software.amazon.awssdk.enhanced.dynamodb.model.PageIterable;
 
 import java.time.Instant;
@@ -26,21 +28,30 @@ public class PersonService {
      * @return
      */
     public PageIterable<Person> getAllPersons() {
-
-        // ...
         PageIterable<Person> people = personTable.scan();
-
         return people;
     }
+
+    /**
+     * Get a specific page of persons from DynamoDB.
+     * @param pageSize The number of items per page
+     * @return A single Page of Person objects
+     */
+    /*public Page<Person> getPersonPage(int pageSize) {
+        PageIterable<Person> people = personTable.scan();
+        return people.stream()
+                .findFirst()
+                .orElse(null);
+    }*/
 
     /**
      * Save or update a Person.
      * If a person with the same id + operation already exists, it will be replaced.
      */
     public Person save(Person person) {
-
+        String id = UUID.randomUUID().toString();
         if (person.getId() == null || person.getId().isBlank()) {
-            person.setId(UUID.randomUUID().toString());
+            person.setId(id);
         }
 
         if (person.getOperation() == null || person.getOperation().isBlank()) {
@@ -49,8 +60,30 @@ public class PersonService {
 
         person.setCreatedAt(Instant.now());
 
-        personTable.putItem(person);   // Save to DynamoDB
+        personTable.putItem(person); // Save to DynamoDB
+
+        Key key = Key.builder()
+                .partitionValue(person.getId())
+                .sortValue(person.getOperation())
+                .build();
+
+        System.out.println("Person saved: " + getPersonByKey(id, "CREATE"));
 
         return person;
+    }
+
+    /**
+     * Get a person by their composite key (id + operation).
+     * @param id The partition key
+     * @param operation The sort key
+     * @return The person if found, null otherwise
+     */
+    public Person getPersonByKey(String id, String operation) {
+        Key key = Key.builder()
+                .partitionValue(id)
+                .sortValue(operation)
+                .build();
+        
+        return personTable.getItem(key);
     }
 }
