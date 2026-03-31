@@ -133,6 +133,16 @@ Open your `pom.xml` file and add these dependencies (Spring Boot will manage the
 </dependencies>
 ```
 
+#### Broken dependency
+
+> The <mark>spring-cloud-aws-starter</mark> `dependency` (from `io.awspring.cloud)` is the root cause of an issue. It brings in a lot of **auto-configuration** classes and can interfere with Spring Boot's default component scanning behavior, especially in certain project structures or when version mismatches exist with your Spring Boot version and the AWS SDK v2 dependencies you're already using (dynamodb + dynamodb-enhanced 2.42.23).
+
+Why this happens ?
+
+- @SpringBootApplication implicitly includes `@ComponentScan` that starts scanning from the **package of your main class** and all sub-packages.
+- Some versions/configurations of <mark>Spring Cloud AWS</mark> (particularly older 2.x or mismatched 3.x) pull in meta-data, auto-config imports, or context setup that can shift effective scanning roots, cause classpath conflicts, or make Spring treat the main class differently during bootstrap.
+- This often manifests as your main class (or other @Component/@Service/@Repository/@Controller classes) not being picked up, or the application failing to start with strange "class not found as bean" behavior.
+
 ### Step 2: Create the Person Class
 
 > **@DynamoDbBean** is a class-level annotation in the **AWS SDK for Java 2.x** (Enhanced DynamoDB client). 
@@ -612,4 +622,4 @@ public class PersonController {
 }
 ```
 
-**Note**: `id` and `operation` are optional in the request body. The service will generate them automatically if missing.
+**Note**: `id` and `operation` are optional in the request body. The service will generate them automatically if missing.``
