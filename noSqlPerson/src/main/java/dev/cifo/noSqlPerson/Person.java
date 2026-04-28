@@ -2,6 +2,8 @@ package dev.cifo.noSqlPerson;
 
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*;
 import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @DynamoDbBean   // This tells the Enhanced Client this class can be mapped to DynamoDB
@@ -18,7 +20,8 @@ public class Person {
     private String schoolId;
     private String schoolItem;
 
-
+    // Dynamic extra fields (very flexible!)
+    private Map<String, Object> extraAttributes = new HashMap<>();
 
     // Default constructor (required for the Enhanced Client)
     // This is used by the Enhanced Client to create new instances of Person
@@ -105,6 +108,21 @@ public class Person {
     public Instant getUpdatedAt() { return updatedAt; }
 
     public void setUpdatedAt(Instant updatedAt) { this.updatedAt = updatedAt; }
+
+    // ==================== Dynamic Map ====================
+    @DynamoDbAttribute("extraAttributes")
+    public Map<String, Object> getExtraAttributes() {
+        return extraAttributes;
+    }
+
+    public void setExtraAttributes(Map<String, Object> extraAttributes) {
+        this.extraAttributes = extraAttributes != null ? extraAttributes : new HashMap<>();
+    }
+
+    // Helper method to easily add dynamic fields
+    public void addExtraField(String key, Object value) {
+        this.extraAttributes.put(key, value);
+    }
 
     @Override
     public String toString() {
