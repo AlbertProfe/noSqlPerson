@@ -31,7 +31,7 @@ public class PersonService {
         // Person.class is the class that will be used to map the table
         // with items from the table to Person objects, that is DynamoDB beans
         this.personTable = enhancedClient.table(
-                "person",
+                "courses",
                 TableSchema.fromBean(Person.class)
         );
         this.eventPublisher = eventPublisher;
