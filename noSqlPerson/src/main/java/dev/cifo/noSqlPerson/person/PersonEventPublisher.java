@@ -1,4 +1,4 @@
-package dev.cifo.noSqlPerson;
+package dev.cifo.noSqlPerson.person;
 
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;

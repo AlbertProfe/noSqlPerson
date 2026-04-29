@@ -1,9 +1,8 @@
-package dev.cifo.noSqlPerson;
+package dev.cifo.noSqlPerson.person;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import software.amazon.awssdk.enhanced.dynamodb.model.Page;
 import software.amazon.awssdk.enhanced.dynamodb.model.PageIterable;
 
 import java.util.List;

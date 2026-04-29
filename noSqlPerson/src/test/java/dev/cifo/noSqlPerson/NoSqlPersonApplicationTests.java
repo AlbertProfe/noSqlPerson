@@ -1,5 +1,8 @@
 package dev.cifo.noSqlPerson;
 
+import dev.cifo.noSqlPerson.person.Person;
+import dev.cifo.noSqlPerson.person.PersonEventPublisher;
+import dev.cifo.noSqlPerson.person.PersonService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
@@ -25,12 +28,12 @@ class NoSqlPersonApplicationTests {
 
 	@Test
 	void createPerson() {
-		String id = "WEB_APP_2029";
+		String id = "WEB_APP_2030";
 		List<Person> persons = new ArrayList<>();
 
 		// 500 students
 		long genStart = System.currentTimeMillis();
-		for (int i = 1; i <= 500; i++) {
+		for (int i = 1; i <= 1000; i++) {
 			Person p = new Person();
 			p.setCourseId(id);
 			p.setCourseItem(String.format("STUDENT#%04d", i));
@@ -43,7 +46,7 @@ class NoSqlPersonApplicationTests {
 		}
 
 		// 40 teachers
-		for (int i = 1; i <= 40; i++) {
+		for (int i = 1; i <= 400; i++) {
 			Person p = new Person();
 			p.setCourseId(id);
 			p.setCourseItem(String.format("TEACHER#%04d", i));
@@ -56,7 +59,7 @@ class NoSqlPersonApplicationTests {
 		}
 
 		// 50 staff
-		for (int i = 1; i <= 50; i++) {
+		for (int i = 1; i <= 500; i++) {
 			Person p = new Person();
 			p.setCourseId(id);
 			p.setCourseItem(String.format("STAFF#%04d", i));
@@ -69,7 +72,7 @@ class NoSqlPersonApplicationTests {
 		}
 
 		// 50 legal
-		for (int i = 1; i <= 50; i++) {
+		for (int i = 1; i <= 500; i++) {
 			Person p = new Person();
 			p.setCourseId(id);
 			p.setCourseItem(String.format("LEGAL#%04d", i));

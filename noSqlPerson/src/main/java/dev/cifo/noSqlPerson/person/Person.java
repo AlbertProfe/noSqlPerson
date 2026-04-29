@@ -1,10 +1,9 @@
-package dev.cifo.noSqlPerson;
+package dev.cifo.noSqlPerson.person;
 
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 @DynamoDbBean   // This tells the Enhanced Client this class can be mapped to DynamoDB
 public class Person {

@@ -1,4 +1,4 @@
-package dev.cifo.noSqlPerson;
+package dev.cifo.noSqlPerson.person;
 
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.core.pagination.sync.SdkIterable;
