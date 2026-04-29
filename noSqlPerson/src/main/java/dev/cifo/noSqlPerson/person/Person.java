@@ -1,6 +1,7 @@
 package dev.cifo.noSqlPerson.person;
 
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*;
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +21,7 @@ public class Person {
     private String schoolItem;
 
     // Dynamic extra fields (very flexible!)
-    private Map<String, String> extraAttributes = new HashMap<>();
+    private Map<String, AttributeValue> extraAttributes = new HashMap<>();
 
     // Default constructor (required for the Enhanced Client)
     // This is used by the Enhanced Client to create new instances of Person
@@ -109,19 +110,32 @@ public class Person {
     public void setUpdatedAt(Instant updatedAt) { this.updatedAt = updatedAt; }
 
     // ==================== Dynamic Map ====================
-    /*@DynamoDbAttribute("extraAttributes")
-    public Map<String, String> getExtraAttributes() {
+    @DynamoDbAttribute("extraAttributes")
+    @DynamoDbConvertedBy(ExtraAttributesConverter.class)
+    public Map<String, AttributeValue> getExtraAttributes() {
         return extraAttributes;
     }
 
-    public void setExtraAttributes(Map<String, String> extraAttributes) {
+    public void setExtraAttributes(Map<String, AttributeValue> extraAttributes) {
         this.extraAttributes = extraAttributes != null ? extraAttributes : new HashMap<>();
     }
 
-    // Helper method to easily add dynamic fields
-    public void addExtraField(String key, String value) {
+    // Helper methods to easily add dynamic fields
+    public void addExtraField(String key, AttributeValue value) {
         this.extraAttributes.put(key, value);
-    }*/
+    }
+
+    public void addExtraString(String key, String value) {
+        this.extraAttributes.put(key, AttributeValue.builder().s(value).build());
+    }
+
+    public void addExtraNumber(String key, Number value) {
+        this.extraAttributes.put(key, AttributeValue.builder().n(value.toString()).build());
+    }
+
+    public void addExtraBool(String key, boolean value) {
+        this.extraAttributes.put(key, AttributeValue.builder().bool(value).build());
+    }
 
     @Override
     public String toString() {
@@ -135,6 +149,7 @@ public class Person {
                 ", updatedAt=" + updatedAt +
                 ", schoolId='" + schoolId + '\'' +
                 ", schoolItem='" + schoolItem + '\'' +
+                ", extraAttributes=" + extraAttributes +
                 '}' + "\n";
     }
 }
